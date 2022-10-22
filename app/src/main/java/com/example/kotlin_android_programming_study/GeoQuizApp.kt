@@ -38,7 +38,7 @@ class GeoQuizApp : AppCompatActivity() {
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
         nextButton = findViewById(R.id.next_button)
-        previousButton = findViewById(R.id.privious_button)
+        previousButton = findViewById(R.id.previous_button)
         questionTextView = findViewById(R.id.question_textview)
 
 
@@ -70,6 +70,7 @@ class GeoQuizApp : AppCompatActivity() {
         val questionTextResId = questionBank[currentIndex].textResId
         questionTextView.setText(questionTextResId)
     }
+
     private fun checkAnswer(userAnswer : Boolean){
         val correctAnswer = questionBank[currentIndex].answer
 
@@ -81,6 +82,27 @@ class GeoQuizApp : AppCompatActivity() {
         Toast.makeText(this, messegeResId, Toast.LENGTH_SHORT).show()
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
 
+    override fun onResume() {
+        super.onResume()
+    }
 
+    override fun onStop() {
+        super.onStop()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+    }
 }

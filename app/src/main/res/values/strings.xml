@@ -12,5 +12,5 @@
     <string name="true_text">True</string>
     <string name="false_text">False</string>
     <string name="next_text">NEXT</string>
-    <string name="prrevious">PREVIOUS</string>
+    <string name="previous">PREVIOUS</string>
 </resources>
