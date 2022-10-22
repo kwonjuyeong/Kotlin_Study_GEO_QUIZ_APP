@@ -4,8 +4,8 @@ package com.example.kotlin_android_programming_study
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 
@@ -16,8 +16,8 @@ class GeoQuizApp : AppCompatActivity() {
     //null 허용 프로퍼티나 기초 타입 프로퍼티에는 사용할 수 없다.
     private lateinit var trueButton : Button
     private lateinit var falseButton : Button
-    private lateinit var nextButton: Button
-    private lateinit var previousButton: Button
+    private lateinit var nextButton: ImageButton
+    private lateinit var previousButton: ImageButton
     private lateinit var questionTextView: TextView
 
     private val questionBank = listOf(
@@ -80,4 +80,7 @@ class GeoQuizApp : AppCompatActivity() {
         }
         Toast.makeText(this, messegeResId, Toast.LENGTH_SHORT).show()
     }
+
+
+
 }

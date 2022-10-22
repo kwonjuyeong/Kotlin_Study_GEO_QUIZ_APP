@@ -1,13 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Linear Layout이 루트 요소이므로 XML 네임 스페이스를 지정해야한다.-->
-<!--
-match_parent = 자신의 부모만큼의 크기가 된다.
-wrap_content = 자신이 갖는 콘텐츠에 필요한 크기가 된다.
-orientation = 수직(vertical), 수평(horizontal)
-padding = 안쪽 여백
-margin = 바깥쪽 여백
-text = @string/ 형태로 쓰는 것을 권장한다.  -->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
