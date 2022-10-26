@@ -4,6 +4,7 @@ package com.example.kotlin_android_programming_study
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
@@ -30,6 +31,8 @@ class GeoQuizApp : AppCompatActivity() {
         Question(R.string.question_americas, true)
     )
     private var currentIndex = 0
+    private var correct = 0
+    private var array = ArrayList<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,46 +47,59 @@ class GeoQuizApp : AppCompatActivity() {
 
         trueButton.setOnClickListener{
             checkAnswer(true)
-            //Toast.makeText(this, R.string.correct_toast,Toast.LENGTH_SHORT).show()
+            array.add(currentIndex)
+            correct += 1
         }
         falseButton.setOnClickListener {
             checkAnswer(false)
-            //Toast.makeText(this, R.string.incorrect_toast,Toast.LENGTH_SHORT).show()
+            array.add(currentIndex)
         }
         nextButton.setOnClickListener {
             currentIndex = (currentIndex+1)%questionBank.size
-            //val questionTextResId = questionBank[currentIndex].textResId
-            //questionTextView.setText(questionTextResId)
             updateQuestion()
+            //Chapter3 챌린지 2번
+            if(currentIndex + 1  == questionBank.size){
+                val hundread : Float = (correct.toFloat() / questionBank.size) * 100
+                Toast.makeText(this@GeoQuizApp, "백분율 : $hundread%", Toast.LENGTH_SHORT).show()
+                nextButton.isEnabled = false
+            //  array.clear()
+            //  correct = 0
+            }
         }
         previousButton.setOnClickListener {
-            currentIndex = (currentIndex+-1)%questionBank.size
-            //val questionTextResId = questionBank[currentIndex].textResId
-            //questionTextView.setText(questionTextResId)
+            currentIndex = (currentIndex-1)%questionBank.size
             updateQuestion()
         }
-        updateQuestion()
-
     }
 
     private fun updateQuestion(){
+
+        if(array.contains(currentIndex)){
+        trueButton.isEnabled = false
+        falseButton.isEnabled = false
+        }else{
+            trueButton.isEnabled = true
+            falseButton.isEnabled = true
+        }
+
         val questionTextResId = questionBank[currentIndex].textResId
         questionTextView.setText(questionTextResId)
     }
 
     private fun checkAnswer(userAnswer : Boolean){
         val correctAnswer = questionBank[currentIndex].answer
-
         val messegeResId = if(userAnswer == correctAnswer){
             R.string.correct_toast
         }else{
             R.string.incorrect_toast
+
         }
         Toast.makeText(this, messegeResId, Toast.LENGTH_SHORT).show()
     }
 
     override fun onStart() {
         super.onStart()
+
     }
 
     override fun onResume() {
@@ -92,17 +108,21 @@ class GeoQuizApp : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
+
     }
 
     override fun onPause() {
         super.onPause()
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
+
     }
 
     override fun onRestart() {
         super.onRestart()
+
     }
 }
