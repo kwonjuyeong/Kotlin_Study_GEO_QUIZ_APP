@@ -30,22 +30,14 @@ class GeoQuizApp : AppCompatActivity() {
         ViewModelProvider(this).get(QuizViewModel::class.java)
     }
 
-    private var correct = 0
-    private var array = ArrayList<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_geo_quiz_app)
 
-
         val currentIndex = savedInstanceState?.getInt(KEY_INDEX, 0) ?: 0
         quizViewModel.currentIndex = currentIndex
-
-        /*val provider : ViewModelProvider = ViewModelProvider(this)
-        val quizViewModel = provider.get(QuizViewModel::class.java)
-        Log.d(TAG, "Got a QuizViewModel : $quizViewModel")*/
-
 
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
@@ -56,49 +48,24 @@ class GeoQuizApp : AppCompatActivity() {
 
         trueButton.setOnClickListener{
             checkAnswer(true)
-            //array.add(currentIndex)
-           // correct += 1
         }
         falseButton.setOnClickListener {
             checkAnswer(false)
-            //array.add(currentIndex)
         }
-        nextButton.setOnClickListener {
-            //currentIndex = (currentIndex+1)%questionBank.size
+        nextButton.setOnClickListener{
             updateQuestion()
-            //Chapter3 챌린지 2번
-
-            /*if(currentIndex + 1  == questionBank.size){
-                val hundread : Float = (correct.toFloat() / questionBank.size) * 100
-                Toast.makeText(this@GeoQuizApp, "백분율 : $hundread%", Toast.LENGTH_SHORT).show()
-                nextButton.isEnabled = false
-            //  array.clear()
-            //  correct = 0
-            }*/
         }
         previousButton.setOnClickListener {
-            //currentIndex = (currentIndex-1)%questionBank.size
             updateQuestion()
         }
     }
 
     private fun updateQuestion(){
-        /*
-        if(array.contains(currentIndex)){
-        trueButton.isEnabled = false
-        falseButton.isEnabled = false
-        }else{
-            trueButton.isEnabled = true
-            falseButton.isEnabled = true
-        }*/
-
-        //val questionTextResId = questionBank[currentIndex].textResId
         val questionTextResId = quizViewModel.currentQuestionText
         questionTextView.setText(questionTextResId)
     }
 
     private fun checkAnswer(userAnswer : Boolean){
-        //val correctAnswer = questionBank[currentIndex].answer
         val correctAnswer = quizViewModel.currentQuestionAnswer
         val messegeResId = if(userAnswer == correctAnswer){
             R.string.correct_toast
