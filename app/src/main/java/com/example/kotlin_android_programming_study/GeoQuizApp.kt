@@ -4,11 +4,16 @@ package com.example.kotlin_android_programming_study
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+
+private const val KEY_INDEX = "index"
+private const val TAG = "Activity"
 
 class GeoQuizApp : AppCompatActivity() {
 
@@ -21,22 +26,26 @@ class GeoQuizApp : AppCompatActivity() {
     private lateinit var previousButton: ImageButton
     private lateinit var questionTextView: TextView
 
-    private val questionBank = listOf(
-        Question(R.string.question_australia, true),
-        Question(R.string.question_africa, true),
-        Question(R.string.question_asia, true),
-        Question(R.string.question_korea, true),
-        Question(R.string.question_ocean, true),
-        Question(R.string.question_mideast, true),
-        Question(R.string.question_americas, true)
-    )
-    private var currentIndex = 0
+    private val quizViewModel : QuizViewModel by lazy {
+        ViewModelProvider(this).get(QuizViewModel::class.java)
+    }
+
     private var correct = 0
     private var array = ArrayList<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_geo_quiz_app)
+
+
+        val currentIndex = savedInstanceState?.getInt(KEY_INDEX, 0) ?: 0
+        quizViewModel.currentIndex = currentIndex
+
+        /*val provider : ViewModelProvider = ViewModelProvider(this)
+        val quizViewModel = provider.get(QuizViewModel::class.java)
+        Log.d(TAG, "Got a QuizViewModel : $quizViewModel")*/
+
 
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
@@ -47,52 +56,54 @@ class GeoQuizApp : AppCompatActivity() {
 
         trueButton.setOnClickListener{
             checkAnswer(true)
-            array.add(currentIndex)
-            correct += 1
+            //array.add(currentIndex)
+           // correct += 1
         }
         falseButton.setOnClickListener {
             checkAnswer(false)
-            array.add(currentIndex)
+            //array.add(currentIndex)
         }
         nextButton.setOnClickListener {
-            currentIndex = (currentIndex+1)%questionBank.size
+            //currentIndex = (currentIndex+1)%questionBank.size
             updateQuestion()
             //Chapter3 챌린지 2번
-            if(currentIndex + 1  == questionBank.size){
+
+            /*if(currentIndex + 1  == questionBank.size){
                 val hundread : Float = (correct.toFloat() / questionBank.size) * 100
                 Toast.makeText(this@GeoQuizApp, "백분율 : $hundread%", Toast.LENGTH_SHORT).show()
                 nextButton.isEnabled = false
             //  array.clear()
             //  correct = 0
-            }
+            }*/
         }
         previousButton.setOnClickListener {
-            currentIndex = (currentIndex-1)%questionBank.size
+            //currentIndex = (currentIndex-1)%questionBank.size
             updateQuestion()
         }
     }
 
     private fun updateQuestion(){
-
+        /*
         if(array.contains(currentIndex)){
         trueButton.isEnabled = false
         falseButton.isEnabled = false
         }else{
             trueButton.isEnabled = true
             falseButton.isEnabled = true
-        }
+        }*/
 
-        val questionTextResId = questionBank[currentIndex].textResId
+        //val questionTextResId = questionBank[currentIndex].textResId
+        val questionTextResId = quizViewModel.currentQuestionText
         questionTextView.setText(questionTextResId)
     }
 
     private fun checkAnswer(userAnswer : Boolean){
-        val correctAnswer = questionBank[currentIndex].answer
+        //val correctAnswer = questionBank[currentIndex].answer
+        val correctAnswer = quizViewModel.currentQuestionAnswer
         val messegeResId = if(userAnswer == correctAnswer){
             R.string.correct_toast
         }else{
             R.string.incorrect_toast
-
         }
         Toast.makeText(this, messegeResId, Toast.LENGTH_SHORT).show()
     }
@@ -113,8 +124,14 @@ class GeoQuizApp : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-
     }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        super.onSaveInstanceState(savedInstanceState)
+        Log.d(TAG, "onSaveInstanceState")
+        savedInstanceState.putInt(KEY_INDEX, quizViewModel.currentIndex)
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()
