@@ -1,6 +1,5 @@
 package com.example.kotlin_android_programming_study
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 
 private const val TAG = "QuizViewModel"
@@ -16,6 +15,7 @@ class QuizViewModel : ViewModel(){
     }*/
 
     var currentIndex = 0
+    var isCheater = false
 
     private val questionBank = listOf(
         Question(R.string.question_australia, true),

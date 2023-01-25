@@ -2,9 +2,10 @@ package com.example.kotlin_android_programming_study
 //Activity는 안드로이드 SDK클래스인 Activity의 인스턴스(객체)이다.
 //Activity의 서브 클래스를 만들어서 앱의 기능을 구현한다.
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
@@ -13,15 +14,16 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 
 private const val KEY_INDEX = "index"
-private const val TAG = "Activity"
+private const val TAG = "GeoQuizApp"
+private const val REQUEST_CODE_CHEAT = 0
 
 class GeoQuizApp : AppCompatActivity() {
 
-    //ㅋ
     private lateinit var trueButton : Button
     private lateinit var falseButton : Button
     private lateinit var nextButton: ImageButton
     private lateinit var previousButton: ImageButton
+    private lateinit var cheatButton : Button
     private lateinit var questionTextView: TextView
 
     private val quizViewModel : QuizViewModel by lazy {
@@ -48,6 +50,7 @@ class GeoQuizApp : AppCompatActivity() {
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
         nextButton = findViewById(R.id.next_button)
+        cheatButton = findViewById(R.id.cheat_button)
         previousButton = findViewById(R.id.previous_button)
         questionTextView = findViewById(R.id.question_textview)
 
@@ -65,7 +68,6 @@ class GeoQuizApp : AppCompatActivity() {
             //currentIndex = (currentIndex+1)%questionBank.size
             updateQuestion()
             //Chapter3 챌린지 2번
-
             /*if(currentIndex + 1  == questionBank.size){
                 val hundread : Float = (correct.toFloat() / questionBank.size) * 100
                 Toast.makeText(this@GeoQuizApp, "백분율 : $hundread%", Toast.LENGTH_SHORT).show()
@@ -78,6 +80,15 @@ class GeoQuizApp : AppCompatActivity() {
             //currentIndex = (currentIndex-1)%questionBank.size
             updateQuestion()
         }
+        cheatButton.setOnClickListener{
+            //val intent = Intent(this, CheatActivity::class.java)
+            val answerIsTrue = quizViewModel.currentQuestionAnswer
+            val intent = CheatActivity.newIntent(this@GeoQuizApp, answerIsTrue)
+            //startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_CHEAT)
+        }
+        updateQuestion()
+
     }
 
     private fun updateQuestion(){
@@ -96,33 +107,15 @@ class GeoQuizApp : AppCompatActivity() {
     }
 
     private fun checkAnswer(userAnswer : Boolean){
-        //val correctAnswer = questionBank[currentIndex].answer
         val correctAnswer = quizViewModel.currentQuestionAnswer
-        val messegeResId = if(userAnswer == correctAnswer){
-            R.string.correct_toast
-        }else{
-            R.string.incorrect_toast
+        val messageResId = when{
+            quizViewModel.isCheater -> R.string.judgement_toast
+            userAnswer == correctAnswer -> R.string.correct_toast
+            else -> R.string.incorrect_toast
         }
-        Toast.makeText(this, messegeResId, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onStart() {
-        super.onStart()
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         super.onSaveInstanceState(savedInstanceState)
@@ -130,14 +123,16 @@ class GeoQuizApp : AppCompatActivity() {
         savedInstanceState.putInt(KEY_INDEX, quizViewModel.currentIndex)
     }
 
-
-    override fun onDestroy() {
-        super.onDestroy()
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode != Activity.RESULT_OK){
+            return
+        }
+        if(requestCode == REQUEST_CODE_CHEAT){
+            quizViewModel.isCheater = data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
+        }
 
     }
 
-    override fun onRestart() {
-        super.onRestart()
-
-    }
 }
