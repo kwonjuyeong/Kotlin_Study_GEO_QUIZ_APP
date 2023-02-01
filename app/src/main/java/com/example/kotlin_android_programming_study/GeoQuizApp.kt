@@ -4,13 +4,13 @@ package com.example.kotlin_android_programming_study
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 
 private const val KEY_INDEX = "index"
@@ -26,6 +26,7 @@ class GeoQuizApp : AppCompatActivity() {
     private lateinit var cheatButton : Button
     private lateinit var questionTextView: TextView
 
+
     private val quizViewModel : QuizViewModel by lazy {
         ViewModelProvider(this).get(QuizViewModel::class.java)
     }
@@ -37,7 +38,6 @@ class GeoQuizApp : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_geo_quiz_app)
-
 
         val currentIndex = savedInstanceState?.getInt(KEY_INDEX, 0) ?: 0
         quizViewModel.currentIndex = currentIndex
@@ -88,7 +88,6 @@ class GeoQuizApp : AppCompatActivity() {
             startActivityForResult(intent, REQUEST_CODE_CHEAT)
         }
         updateQuestion()
-
     }
 
     private fun updateQuestion(){

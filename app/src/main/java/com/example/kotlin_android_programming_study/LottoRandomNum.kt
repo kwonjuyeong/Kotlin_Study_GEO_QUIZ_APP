@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -20,10 +21,18 @@ class LottoRandomNum : AppCompatActivity() {
     private lateinit var num5: TextView
     private lateinit var num6: TextView
     private lateinit var clear : Button
+    private var result = 100000.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lotto_random_num)
+        val year4 = 1460
+        for(i in 0 until year4){
+            result *= 1.01
+            val t_dec_up = DecimalFormat("#,###")
+            Log.d("dataloggg", "원금 10만원 1년동안 매일 1%씩 수익 : ${t_dec_up.format(result.toBigDecimal())}원")
+
+        }
         var index :Int = 0
         sibal = findViewById(R.id.button)
         clear = findViewById(R.id.clear_btn)
